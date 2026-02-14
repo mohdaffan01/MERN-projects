@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Product from "./Product";
 import Users from "./Users";
 import Order from "./Order"
+import Revenue from "./Revenue"
 
 export default function AdminDashboard() {
   
@@ -18,6 +19,9 @@ export default function AdminDashboard() {
         <Route path="products" element={<Product  />} />
         <Route path="users" element={<Users />} />
         <Route path="orders" element={<Order />} />
+        <Route path="revenue" element={<Revenue />} />
+        
+
 
         <Route path="" element={<Navigate to={"dashboard"} />} />
       </Routes>

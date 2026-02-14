@@ -45,7 +45,11 @@ export default function Sidbar() {
           <p className="px-3 py-2 cursor-pointer rounded hover:bg-gray-700">👥 Users</p>
         </Link>
         <p className="px-3 py-2 cursor-pointer rounded hover:bg-gray-700">💳 Payment</p>
-        <p className="px-3 py-2 cursor-pointer rounded hover:bg-gray-700">🚚 Shipping</p>
+
+        <Link to={"/admin/revenue"}>
+          <p className="px-3 py-2 cursor-pointer rounded hover:bg-gray-700">💹 Revenue</p>
+        </Link>
+
         <p className="px-3 py-2 cursor-pointer rounded hover:bg-gray-700">🏷️ Discounts</p>
 
         <p className="text-xs text-gray-400 uppercase mt-3">Insights</p>

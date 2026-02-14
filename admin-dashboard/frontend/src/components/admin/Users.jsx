@@ -33,7 +33,7 @@ export default function Users() {
           {/**add map funtion and fetch data from database */}
 
           {users?.length === 0 ? (
-            <p>User not found</p>
+            <p> User not found</p>
           ) : (
             users?.map((user) => (
               <div key={user._id} className="border mt-2 rounded-md p-2">
