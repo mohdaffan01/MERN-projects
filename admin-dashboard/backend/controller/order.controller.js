@@ -60,13 +60,22 @@ export const createOrder = async (req, res) => {
 //------------------get Order -----------------------------
 export const getOrder = async (req, res) => {
     try {
-        const orders = await Order.find().populate("user").populate("product");
-        const totalOrders = orders.length;
+        const searchData = req.query.search || "";
+
+        const orders = await Order.find()
+            .populate("user")
+            .populate("product");
+
+        const filterOrders = orders.filter((order) =>
+            order.product?.name?.toLowerCase().includes(searchData.toLowerCase())
+        );
+
         return res.status(200).json({
-            totalOrders,
+            totalOrders: filterOrders.length,
             success: true,
-            data: orders
-        })
+            data: filterOrders
+        });
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -74,4 +83,27 @@ export const getOrder = async (req, res) => {
             message: "Server error"
         });
     }
-}
+};
+
+//---------------------------total revenue ----------------
+export const getTotalRevenue = async (req, res) => {
+    try {
+        const orders = await Order.find({ orderStatus: "delivered" });
+
+        let totalRevenue = 0;
+
+        orders.forEach((order) => {
+            totalRevenue = totalRevenue + order.totalAmount;
+        });
+
+        return res.status(200).json({
+            success: true,
+            totalRevenue: totalRevenue,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error!",
+        });
+    }
+};

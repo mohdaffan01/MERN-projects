@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 export const createUser = async (req, res, next) => {
     try {
         const data = req.body;
-        if (!data?.name?.trim() || !data?.email?.trim() || !data.username?.trim() || !data?.password?.trim() || !data?.confirmPassword?.trim()){
+        if (!data?.name?.trim() || !data?.email?.trim() || !data.username?.trim() || !data?.password?.trim() || !data?.confirmPassword?.trim()) {
             return res.status(400).json({
                 seccess: false,
                 message: "All fields are required"
@@ -25,7 +25,7 @@ export const createUser = async (req, res, next) => {
                 message: "Email already exists!"
             });
         }
-        if(data.password !== data.confirmPassword){
+        if (data.password !== data.confirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Confirm password not match!"
@@ -38,10 +38,10 @@ export const createUser = async (req, res, next) => {
             username: data.username,
             password: hashedPassword,
             confirmPassword: data.confirmPassword,
-            role : data.role
+            role: data.role
         })
-        const token = jwt.sign({id : user._id }, process.env.SECRET, {expiresIn : "7d"});
-        res.cookie("token",token).status(201).json({
+        const token = jwt.sign({ id: user._id }, process.env.SECRET, { expiresIn: "7d" });
+        res.cookie("token", token).status(201).json({
             user: user,
             success: true,
             message: "User created successffuly"
@@ -53,20 +53,28 @@ export const createUser = async (req, res, next) => {
 }
 
 //------------------get user--------------------------
-export const getUser = async(req , res, next) => {
-    try{
-        const users = await User.find().select("name email username role");
+export const getUser = async (req, res, next) => {
+    try {
+        const search = req.query.search || "";
+        let query = {}
+        if (search) {
+            query = {
+                name: { $regex: search, $options: "i" }
+            };
+        }
+        const users = await User.find(query).select("name email username role");
+
         return res.status(200).json({
-            success : true,
-            data : users
+            success: true,
+            data: users
         })
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 //---------------------------------Login---------------------------------
-export const login = async (req, res ,next) => {
+export const login = async (req, res, next) => {
     try {
         const data = req.body;
 
@@ -86,7 +94,7 @@ export const login = async (req, res ,next) => {
             });
         }
         // Compare password
-        const isPasswordMatch = await bcrypt.compare( data.password,user.password);
+        const isPasswordMatch = await bcrypt.compare(data.password, user.password);
 
         if (!isPasswordMatch) {
             return res.status(401).json({
@@ -100,9 +108,9 @@ export const login = async (req, res ,next) => {
                 message: "Admin access only!"
             })
         }
-        const token = jwt.sign({id : user._id },process.env.SECRET, {expiresIn : "7d"});
+        const token = jwt.sign({ id: user._id }, process.env.SECRET, { expiresIn: "7d" });
         //  Success
-        return res.cookie("token",token).status(200).json({
+        return res.cookie("token", token).status(200).json({
             success: true,
             message: "Login successfully!",
         });

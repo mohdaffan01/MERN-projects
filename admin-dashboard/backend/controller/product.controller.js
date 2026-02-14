@@ -40,12 +40,24 @@ export const createProduct = async (req, res) => {
 //--------------------------get product-------------------------------
 export const getProduct = async (req, res) => {
     try {
-        const deleteProduct = await Product.deleteMany({stock : 0});
-        const users = await Product.find().select("_id name description price category stock");
+        const search = req.query.search || "";
+
+        let query = {};
+
+        if (search) {
+            query = {
+                name: { $regex: search, $options: "i" }
+            };
+        }
+
+        const product = await Product.find(query)
+            .select("_id name description price category stock");
+
         return res.status(200).json({
             success: true,
-            data: users
-        })
+            data: product
+        });
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -53,4 +65,4 @@ export const getProduct = async (req, res) => {
             message: "Server error"
         });
     }
-}
+};
