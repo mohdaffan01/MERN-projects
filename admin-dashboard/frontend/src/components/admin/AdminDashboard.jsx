@@ -7,6 +7,7 @@ import Product from "./Product";
 import Users from "./Users";
 import Order from "./Order"
 import Revenue from "./Revenue"
+import Profile from "./Profile";
 
 export default function AdminDashboard() {
   
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
         <Route path="users" element={<Users />} />
         <Route path="orders" element={<Order />} />
         <Route path="revenue" element={<Revenue />} />
+        <Route path="profile" element={<Profile />} />
         
 
 

@@ -7,21 +7,22 @@ export default function Sidbar() {
     <div className="bg-linear-to-br from-gray-900 to-slate-800 w-64 h-screen fixed left-0 top-0">
       <h1 className="text-2xl text-cyan-700 mt-3 text-center">Admin-Dashboard</h1>
       {/* profile */}
-      <div className="flex items-center gap-4 my-6">
-        <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-50">
-          <img
-            src="https://www.clipartmax.com/png/middle/17-172602_computer-icons-user-profile-male-portrait-of-a-man.png"
-            alt="profile image"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      <Link to={"/admin/profile"}>
+        <div className="flex items-center gap-4 my-6 hover:bg-gray-800/50 p-2 rounded-lg transition-colors cursor-pointer mx-2">
+          <div className="w-16 h-16 rounded-full border-2 border-cyan-800 overflow-hidden bg-gray-50 flex-shrink-0">
+            <img
+              src="https://www.clipartmax.com/png/middle/17-172602_computer-icons-user-profile-male-portrait-of-a-man.png"
+              alt="profile image"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-        <div className="text-gray-400 text-2xl hover:text-gray-500">
-          <a href="">
-            <p>Mohd Affan</p>
-          </a>
+          <div className="text-gray-300 text-lg hover:text-white transition-colors truncate">
+            <p className="font-medium">Mohd Affan</p>
+            <p className="text-xs text-gray-500 font-normal">Admin Profile</p>
+          </div>
         </div>
-      </div>
+      </Link>
       <div className="w-full h-px bg-gray-700 my-4"></div>
 
       {/**components */}

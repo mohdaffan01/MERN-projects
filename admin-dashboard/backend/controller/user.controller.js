@@ -123,3 +123,16 @@ export const login = async (req, res, next) => {
         next(error)
     }
 };
+
+//---------------------------------Get Profile----------------------------
+export const getProfile = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id).select("-password -confirmPassword");
+        return res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+};
