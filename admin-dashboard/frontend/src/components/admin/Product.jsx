@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 import axios from "../../api/axios";
 
 export default function Product() {
@@ -77,6 +78,33 @@ export default function Product() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        const response = await axios.delete(`/deleteProduct/${id}`);
+        if (response.data.success) {
+          alert("Product deleted successfully");
+          fetchProduct(); // refresh list
+        }
+      } catch (error) {
+        alert(error.response?.data?.message || "Error deleting product");
+      }
+    }
+  };
+
+  const handleStockUpdate = async (id, currentStock, change) => {
+    const newStock = Math.max(0, currentStock + change);
+    try {
+      const response = await axios.put(`/updateProduct/${id}`, { stock: newStock });
+      if (response.data.success) {
+        // Optimistically update local state or just refetch
+        fetchProduct(search);
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to update stock");
+    }
+  };
+
   return (
     <div className="ml-64 mt-16 h-full p-4">
       <div className="flex justify-between items-center mb-6">
@@ -141,10 +169,33 @@ export default function Product() {
                         <p className="text-lg font-bold text-green-700 mt-2">₹{product.price}</p>
                       </div>
                       <div className="flex justify-between items-center mt-4 pt-2 border-t">
-                        <span className={`text-xs px-2 py-1 rounded font-medium ${product.stock > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-                          Stock: {product.stock}
-                        </span>
-                        {product.brand && <span className="text-xs text-gray-500 italic font-medium">{product.brand}</span>}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleStockUpdate(product._id, product.stock, -1)}
+                            className="bg-red-100 text-red-600 px-2 py-0.5 rounded hover:bg-red-200 transition-colors font-bold"
+                          >
+                            -
+                          </button>
+                          <span className={`text-xs px-2 py-1 rounded font-medium ${product.stock > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                            Stock: {product.stock}
+                          </span>
+                          <button
+                            onClick={() => handleStockUpdate(product._id, product.stock, 1)}
+                            className="bg-green-100 text-green-600 px-2 py-0.5 rounded hover:bg-green-200 transition-colors font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {product.brand && <span className="text-xs text-gray-500 italic font-medium">{product.brand}</span>}
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            className="text-red-500 hover:text-red-700 cursor-pointer transition-colors"
+                            title="Delete Product"
+                          >
+                            <MdDelete size={20} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
