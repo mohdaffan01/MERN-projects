@@ -59,7 +59,11 @@ export const getUser = async (req, res, next) => {
         let query = {}
         if (search) {
             query = {
-                name: { $regex: search, $options: "i" }
+                $or: [
+                    { name: { $regex: search, $options: "i" } },
+                    { username: { $regex: search, $options: "i" } },
+                    { email: { $regex: search, $options: "i" } }
+                ]
             };
         }
         const users = await User.find(query).select("name email username role");

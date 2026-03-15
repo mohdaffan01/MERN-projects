@@ -46,12 +46,16 @@ export const getProduct = async (req, res) => {
 
         if (search) {
             query = {
-                name: { $regex: search, $options: "i" }
+                $or: [
+                    { name: { $regex: search, $options: "i" } },
+                    { description: { $regex: search, $options: "i" } },
+                    { category: { $regex: search, $options: "i" } },
+                    { brand: { $regex: search, $options: "i" } }
+                ]
             };
         }
 
-        const product = await Product.find(query)
-            .select("_id name description price category stock");
+        const product = await Product.find(query);
 
         return res.status(200).json({
             success: true,

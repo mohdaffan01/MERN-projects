@@ -4,25 +4,48 @@ import axios from "../../api/axios";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const fetchUser = async (search = "") => {
+    try {
+      const response = await axios.get(`/allusers?search=${search}`);
+      console.log(response);
+      setUsers(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get("/allusers");
-        console.log(response);
-        setUsers(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchUser();
   }, []);
+
+  const handleSearch = () => {
+    fetchUser(searchTerm);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="ml-64 mt-16  h-full">
       <div className="flex items-center ">
         <h1 className="text-4xl p-4 font-semibold text-cyan-900">Users</h1>
-        <input type="text" placeholder="Search User" className="border border-gray-300 w-full rounded px-3 py-1 focus:outline-none" />
-        <button className="cursor-pointer m-4 text-gray-900 text-xl">
+        <input
+          type="text"
+          placeholder="Search User"
+          className="border border-gray-300 w-full rounded px-3 py-1 focus:outline-none"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={handleKeyPress}
+        />
+        <button
+          className="cursor-pointer m-4 text-gray-900 text-xl"
+          onClick={handleSearch}
+        >
           <BsSearch />
         </button>
       </div>
