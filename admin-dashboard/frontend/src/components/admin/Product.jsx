@@ -157,9 +157,9 @@ export default function Product() {
                         <span className="text-xs">No Image</span>
                       </div>
                     )}
-                    <div className="p-4 flex flex-col flex-grow">
+                    <div className="p-4 flex flex-col grow">
                       <h2 className="text-xl font-bold text-gray-800 border-b pb-2">{product.name}</h2>
-                      <div className="mt-3 space-y-2 flex-grow">
+                      <div className="mt-3 space-y-2 grow">
                         <p className="text-sm text-gray-600 line-clamp-2" title={product.description}>
                           <span className="font-semibold text-cyan-800">Desc:</span> {product.description}
                         </p>

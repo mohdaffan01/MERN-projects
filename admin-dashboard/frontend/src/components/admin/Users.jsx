@@ -9,6 +9,7 @@ export default function Users() {
   const fetchUser = async (search = "") => {
     try {
       const response = await axios.get(`/allusers?search=${search}`);
+      console.log(users);
       console.log(response);
       setUsers(response.data.data);
     } catch (error) {
@@ -19,6 +20,14 @@ export default function Users() {
   useEffect(() => {
     fetchUser();
   }, []);
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    fetchUser(searchTerm);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [searchTerm]);
 
   const handleSearch = () => {
     fetchUser(searchTerm);
