@@ -12,7 +12,7 @@ export default function Revenue() {
             console.log(res.data.totalRevenue)
         
       } catch (error) {
-        console.log("server error!");
+        console.error("Server error:", error);
       }
     };
     fetchRevenue()

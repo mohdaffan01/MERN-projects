@@ -7,7 +7,7 @@ export const createUser = async (req, res, next) => {
         const data = req.body;
         if (!data?.name?.trim() || !data?.email?.trim() || !data.username?.trim() || !data?.password?.trim() || !data?.confirmPassword?.trim()) {
             return res.status(400).json({
-                seccess: false,
+                success: false,
                 message: "All fields are required"
             })
         }
@@ -44,7 +44,7 @@ export const createUser = async (req, res, next) => {
         res.cookie("token", token).status(201).json({
             user: user,
             success: true,
-            message: "User created successffuly"
+            message: "User created successfully"
         })
 
     } catch (error) {

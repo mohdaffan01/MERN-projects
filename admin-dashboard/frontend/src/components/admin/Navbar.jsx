@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <div className="fixed top-0 left-64 right-0 h-16 bg-linear-to-br from-gray-900 to-slate-800 flex items-center justify-between px-6 z-10">
       {/* Left side */}
-      <Link to={"/adminDashboard"}>
+      <Link to={"/admin/dashboard"}>
         <h1 className="text-lg font-semibold text-gray-300">Dashboard</h1>
       </Link>
 

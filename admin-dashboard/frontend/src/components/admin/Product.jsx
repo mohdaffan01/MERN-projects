@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { BsSearch } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import axios from "../../api/axios";
@@ -16,22 +16,33 @@ export default function Product() {
     brand: ""
   });
 
-  const fetchProduct = async (searchValue = "") => {
+  const fetchProduct = useCallback(async (searchValue = "") => {
     try {
       const response = await axios.get(`/getProduct?search=${searchValue}`);
       console.log("Fetched Products:", response.data.data); // Debug log
-      setProducts(response.data.data);
+      return response.data.data;
     } catch (error) {
+      console.error("Error fetching products:", error);
       alert("Something went wrong");
+      return null;
     }
-  };
-
-  useEffect(() => {
-    fetchProduct(); // load all products initially
   }, []);
 
-  const handleSearch = () => {
-    fetchProduct(search);
+  useEffect(() => {
+    let active = true;
+    fetchProduct().then(data => {
+      if (active && data) {
+        setProducts(data);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [fetchProduct]);
+
+  const handleSearch = async () => {
+    const data = await fetchProduct(search);
+    if (data) setProducts(data);
   };
 
   const handleKeyPress = (e) => {
@@ -71,7 +82,8 @@ export default function Product() {
           image: ""
         });
         setActiveTab("view");
-        fetchProduct();
+        const data = await fetchProduct();
+        if (data) setProducts(data);
       }
     } catch (error) {
       alert(error.response?.data?.message || "Error creating product");
@@ -84,7 +96,8 @@ export default function Product() {
         const response = await axios.delete(`/deleteProduct/${id}`);
         if (response.data.success) {
           alert("Product deleted successfully");
-          fetchProduct(); // refresh list
+          const data = await fetchProduct(); // refresh list
+          if (data) setProducts(data);
         }
       } catch (error) {
         alert(error.response?.data?.message || "Error deleting product");
@@ -98,7 +111,8 @@ export default function Product() {
       const response = await axios.put(`/updateProduct/${id}`, { stock: newStock });
       if (response.data.success) {
         // Optimistically update local state or just refetch
-        fetchProduct(search);
+        const data = await fetchProduct(search);
+        if (data) setProducts(data);
       }
     } catch (error) {
       alert(error.response?.data?.message || "Failed to update stock");

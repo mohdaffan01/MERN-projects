@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
-import LoginPage from "./LoginPage";
+
 
 export default function SignUP() {
   const [name, setName] = useState("");
@@ -10,6 +10,7 @@ export default function SignUP() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("admin");
 
   const navigate = useNavigate();
   const handleSubmit = async () => {
@@ -21,6 +22,7 @@ export default function SignUP() {
         email,
         password,
         confirmPassword,
+        role,
       });
       if(res){
         navigate("/login")
@@ -30,9 +32,10 @@ export default function SignUP() {
       setEmail("")
       setPassword("")
       setConfirmPassword("")
+      setRole("admin")
            
     } catch (err) {
-      alert("Something went wrong",err)
+      alert("Something went wrong: " + (err.response?.data?.message || err.message));
       console.log(err.response?.data || err.message);
     }
   };
@@ -111,6 +114,20 @@ export default function SignUP() {
                   placeholder="Confirm your password"
                   className="w-full px-4 py-3 rounded-xl text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                 />
+              </div>
+
+              {/* Role Select */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-900 rounded-xl text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="user">User</option>
+                </select>
               </div>
 
               {/* Sign Up Button */}

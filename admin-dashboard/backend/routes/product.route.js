@@ -6,7 +6,7 @@ import { isAdminMiddleware } from "../middleware/isAdmin.middleware.js";
 const productRouter = express.Router();
 
 productRouter.post("/createProduct",authMiddleware,isAdminMiddleware, createProduct)
-productRouter.get("/getProduct", authMiddleware,isAdminMiddleware,getProduct)
+productRouter.get("/getProduct", getProduct)
 productRouter.delete("/deleteProduct/:id", authMiddleware, isAdminMiddleware, deleteProduct)
 productRouter.put("/updateProduct/:id", authMiddleware, isAdminMiddleware, updateProduct)
 

@@ -10,7 +10,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      const res = await axios.post("/login", {
+      await axios.post("/login", {
         username,
         password,
       });
@@ -83,12 +83,13 @@ export default function LoginPage() {
             </div>
 
             {/* Google Signup */}
-            <Link to={"/admin/dashboard"}>
-              <button className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 shadow-sm transition">
-                <FcGoogle size={22} />
-                <span className="font-medium cursor-pointer text-gray-200">Sign up with Google</span>
-              </button>
-            </Link>
+            <button
+              onClick={() => alert("Google signup is not implemented yet. Please use username and password.")}
+              className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 shadow-sm transition"
+            >
+              <FcGoogle size={22} />
+              <span className="font-medium cursor-pointer text-gray-200">Sign up with Google</span>
+            </button>
             {/* Sign up text */}
             <p className="text-center text-gray-300 mt-6">
               Don’t have an account?{" "}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { BsSearch } from "react-icons/bs";
 import axios from "../../api/axios";
 
@@ -7,21 +7,22 @@ export default function Order() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const fetchOrders = async (searchValue = "") => {
+  const fetchOrders = useCallback(async (searchValue = "") => {
     try {
       setLoading(true);
       const response = await axios.get(`/getOrders?search=${searchValue}`);
       setOrders(response.data.data);
     } catch (error) {
+      console.error("Error fetching orders:", error);
       alert("Something went wrong");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   const handleSearch = () => {
     fetchOrders(search);

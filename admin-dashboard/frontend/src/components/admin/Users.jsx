@@ -1,36 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 import axios from "../../api/axios";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const isMounted = useRef(false);
 
-  const fetchUser = async (search = "") => {
+  const fetchUser = useCallback(async (search = "") => {
     try {
       const response = await axios.get(`/allusers?search=${search}`);
-      console.log(users);
-      console.log(response);
-      setUsers(response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error(error);
+      return null;
     }
-  };
-
-  useEffect(() => {
-    fetchUser();
   }, []);
 
   useEffect(() => {
-  const timer = setTimeout(() => {
-    fetchUser(searchTerm);
-  }, 500);
+    let active = true;
+    if (!isMounted.current) {
+      isMounted.current = true;
+      fetchUser(searchTerm).then(data => {
+        if (active && data) {
+          setUsers(data);
+        }
+      });
+      return;
+    }
 
-  return () => clearTimeout(timer);
-}, [searchTerm]);
+    const timer = setTimeout(() => {
+      fetchUser(searchTerm).then(data => {
+        if (active && data) {
+          setUsers(data);
+        }
+      });
+    }, 500);
 
-  const handleSearch = () => {
-    fetchUser(searchTerm);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [searchTerm, fetchUser]);
+
+  const handleSearch = async () => {
+    const data = await fetchUser(searchTerm);
+    if (data) setUsers(data);
   };
 
   const handleKeyPress = (e) => {

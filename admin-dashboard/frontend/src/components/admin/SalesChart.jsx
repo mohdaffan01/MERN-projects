@@ -23,6 +23,7 @@ export default function SalesChart() {
         console.log(response.data)
 
       } catch (error) {
+        console.error("Error fetching orders:", error);
         alert("Something went wrong");
       }
     };

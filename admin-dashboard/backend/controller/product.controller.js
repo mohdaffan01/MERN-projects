@@ -4,7 +4,7 @@ export const createProduct = async (req, res) => {
     try {
         const { name, description, price, category, stock, image, brand } = req.body;
         // Validation
-        if (!name || !description || !price || !category || stock === 0) {
+        if (!name || !description || !price || !category || stock === undefined || stock === null) {
             return res.status(400).json({
                 success: false,
                 message: "All required fields must be provided"
