@@ -99,7 +99,7 @@ export const login = async (req, res, next) => {
         }
         // Compare password
         const isPasswordMatch = await bcrypt.compare(data.password, user.password);
-
+        
         if (!isPasswordMatch) {
             return res.status(401).json({
                 success: false,
